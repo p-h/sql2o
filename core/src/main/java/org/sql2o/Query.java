@@ -167,6 +167,14 @@ public class Query implements AutoCloseable {
             return addParameter(name, (Timestamp)value);
         if(Time.class==parameterClass)
             return addParameter(name, (Time)value);
+        if(OptionalLong.class == parameterClass)
+            return addParameter(name, (OptionalLong) value);
+        if(OptionalInt.class == parameterClass)
+            return addParameter(name, (OptionalInt) value);
+        if(OptionalDouble.class == parameterClass)
+            return addParameter(name, (OptionalDouble) value);
+        if(Optional.class == parameterClass)
+            return addParameter(name, (Optional) value);
 
         if(parameterClass.isArray()
                 // byte[] is used for blob already
@@ -313,6 +321,40 @@ public class Query implements AutoCloseable {
             }
         });
         return this;
+    }
+
+    public Query addParameter(String name, final OptionalInt value) {
+        if (value.isPresent()) {
+            return addParameter(name, value.getAsInt());
+        }
+
+        return addParameter(name, (Integer) null);
+    }
+
+    public Query addParameter(String name, final OptionalLong value) {
+        if (value.isPresent()) {
+            return addParameter(name, value.getAsLong());
+        }
+
+        return addParameter(name, (Long) null);
+    }
+
+    public Query addParameter(String name, final OptionalDouble value) {
+        if (value.isPresent()) {
+            return addParameter(name, value.getAsDouble());
+
+        }
+
+        return addParameter(name, (Double) null);
+    }
+
+    public <T> Query addParameter(String name, final Optional<T> value) {
+        if (value.isPresent()) {
+            return addParameter(name, value.get());
+
+        }
+
+        return addParameter(name, (T) null);
     }
 
     /**
